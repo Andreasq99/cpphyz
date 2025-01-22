@@ -1,1 +1,0 @@
-"c:\Users\Beets\github\hello-sfml\build\bin\Debug\main.exe"
