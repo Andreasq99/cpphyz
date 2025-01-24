@@ -11,7 +11,6 @@ FetchContent_Declare(SFML
     EXCLUDE_FROM_ALL
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
-find_package(nlohmann_json 3.11.3 REQUIRED)
 
 add_executable(main src/main.cpp)
-target_link_libraries(main PRIVATE SFML::Graphics nlohmann_json::nlohmann_json)
+target_link_libraries(main PRIVATE SFML::Graphics )

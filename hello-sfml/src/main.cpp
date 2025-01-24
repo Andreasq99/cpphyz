@@ -18,6 +18,8 @@ using std::vector;
 using sf::Vector2f;
 using namespace std::chrono;
 
+
+
 const float G = .1f;
 int trackcount = 5;
 vector<Planet*> lop;
