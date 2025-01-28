@@ -2,3 +2,9 @@
 build/
 run.bat
 build.bat
+out
+.cache
+.idea
+.vs
+.vscode
+.github
