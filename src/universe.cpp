@@ -3,78 +3,70 @@
 #include <cstdint>
 #include <assert.h>
 #include <iostream>
+#include <functional>
+#include "constants.hpp"
+#include "cue.cpp"
 
 using idn = uint16_t;
-idn MAX_PLANETS = 10;
-using cid = uint8_t;
-cid COMPONENT_COUNT = 3;
-
-
 
 class Universe {
     public:
         Universe(){
+            std::array<idn,MAX_PLANETS> arr;
             for(idn i = 0; i<MAX_PLANETS; i++){
-                lop.push(i);
+                arr[i]=i;
             }
+            lop = Cue(arr);
             lopCount = 0;
         }
 
-        bool iterateLop(bool callback(idn id));
-        void deletePlanets(std::queue<idn> rml);
+        // template<typename T> T iterateLop(T callback(idn id));
+        void deletePlanets(Cue<idn,MAX_PLANETS> rml);
         void addPlanet();
         void log();
+        idn loppos();
 
     private:
-        std::queue<idn> lop{};
+        Cue<idn,MAX_PLANETS> lop;
         idn lopCount;
 };
 
-bool Universe::iterateLop(bool callback(idn id)){ // calls callback() with the front element of lop, then pushes it to the back of the queue if successful. Otherwise, returns false.
-    idn id = lop.front();
-    if(callback(id)){
-        lop.pop();
-        lop.push(id);
-        return true;
-    }
-    return false;
-}
+// template<typename T> T Universe::iterateLop(T callback(idn id)){ // calls callback() with the front element of lop, then pushes it to the back of the queue if successful. Otherwise, returns false.
+//     for(i=0;i<MAX_PLANETS;i++){
 
-void Universe::deletePlanets(std::queue<idn> rml){ // removes elements of rml from lop, then adds them to the back of the queue.
+//     }
+// }
+
+void Universe::deletePlanets(Cue<idn,MAX_PLANETS> rml){ // removes elements of rml from lop, then adds them to the back of the queue.
     idn rid = rml.front();
     for(idn i = 0; i < MAX_PLANETS; i++){
-        idn id = lop.front();
-        lop.pop();
-        if(rid != id){
-            lop.push(id);
+        if(rid != lop.front()){
+            lop.next();
         } else {
             rml.pop();
-            rml.push(rid);
             rid = rml.front();
+            lop.pop();
             lopCount--;
-            // std::cout << "moved to id " << rid << "\n";
+            if(rid == MAX_PLANETS){break;}
         }
     }
-    // std::cout << "rml has size "<<rml.size()<<"\n";
-    int rmlct = rml.size();
-    for(int i = 0; i < rmlct; i++){
-        // std::cout << "Adding element " << rml.front() << " to lop.\n";
-        lop.push(rml.front());
-        rml.pop();
-    }
-    // std::cout << "\n";
 }
 
 void Universe::addPlanet(){
-
+    lopCount++;
 }
 
-void Universe::log(){ 
-    for(idn i = 0; i < MAX_PLANETS; i++){
-        iterateLop([](idn id) {
-            std::cout << "Element " << id << " found.\n";
-            return true;
-        });
-    }
-    std::cout << "\n";
+// void Universe::log(){ 
+//     for(idn i = 0; i < lopCount; i++){
+//         std::cout << "Element " << iterateLop() << " found.\n";
+//     }
+//     for(idn i = 0; i < MAX_PLANETS - lopCount;i++){
+//         iterateLop();
+//     }
+//     std::cout << "\n";
+// }
+
+void Universe::log(){
+    std::cout << "Planet count: " << lopCount << "\n";
+    logCue(lop);
 }
