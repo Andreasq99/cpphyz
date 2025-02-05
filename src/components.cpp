@@ -2,42 +2,69 @@
 #include <cstdint>
 #include <assert.h>
 #include "constants.hpp"
+#include "cue.cpp"
 
-using cid = uint8_t;
-using idn = uint16_t;
-
-struct Frame{
+struct PhysicsComponent{
     float x;
     float y;
     float vx;
     float vy;
     int m;
+
+    PhysicsComponent(){
+        x = 0;
+        y = 0;
+        vx = 0;
+        vy = 0;
+        m = 0;
+    }
 };
 
 
-struct Graphics{
-    uint8_t rad;
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-};
+struct GraphicsComponent{
+    cid rad;
+    cid r;
+    cid g;
+    cid b;
 
-// struct Tail{
-    
-// }
+    GraphicsComponent(){
+        rad = 0;
+        r = 0;
+        g = 0;
+        b = 0;
+    }
+};
 
 template <typename T>
 class ComponentArray {
+    
+    std::array<T,MAX_PLANETS> mComponentArray;
+
     public: 
-        void insertData(idn id, T component){
-            assert(id < MAX_PLANETS && "Index out of bounds.");
+
+        ComponentArray(){
+            T a();
+            mComponentArray.fill(a);
+        }
+
+        void setData(idn id, T component){
+            assert(id < MAX_PLANETS && "Index out of bounds.\n");
             mComponentArray[id] = T;
         }
-    private:
-        std::array<T,MAX_PLANETS> mComponentArray;
-};
 
-class ComponentManager{
-    public:
+        T getData(idn id){
+            assert(id < MAX_PLANETS && "Index out of bounds.\n")
+            return mComponentArray[id];
+        }
+
+        std::vector<T> liveData(Cue<idn,MAX_PLANETS> cue, idn count){
+            idn j = 0;
+            std::vector<T> res;
+            while(j < count){
+                res.push_back(mComponentArray[cue[j]]);
+                j++;
+            }
+            return res;
+        }
 
 };

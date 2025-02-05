@@ -2,6 +2,10 @@
 
 #if !defined(CONSTANTS_H)
 #define CONSTANTS_H
-    constexpr uint16_t MAX_PLANETS = 10;
-    constexpr uint8_t COMPONENT_COUNT = 2;
+
+    using cid = uint8_t;
+    using idn = uint16_t;
+    constexpr idn MAX_PLANETS = 10;
+    constexpr cid COMPONENT_COUNT = 2;
+    constexpr cid ACTION_LENGTH = 5;
 #endif

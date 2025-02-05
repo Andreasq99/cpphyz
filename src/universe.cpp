@@ -7,9 +7,11 @@
 #include "constants.hpp"
 #include "cue.cpp"
 
-using idn = uint16_t;
-
 class Universe {
+    
+    Cue<idn,MAX_PLANETS> lop;
+    idn lopCount;
+
     public:
         Universe(){
             std::array<idn,MAX_PLANETS> arr;
@@ -20,53 +22,40 @@ class Universe {
             lopCount = 0;
         }
 
-        // template<typename T> T iterateLop(T callback(idn id));
-        void deletePlanets(Cue<idn,MAX_PLANETS> rml);
-        void addPlanet();
+        void deletePlanets(VecCue<idn> rml);
+        idn addPlanet();
         void log();
-        idn loppos();
+        idn lopPos();
+        idn getLopCount();
 
-    private:
-        Cue<idn,MAX_PLANETS> lop;
-        idn lopCount;
 };
 
-// template<typename T> T Universe::iterateLop(T callback(idn id)){ // calls callback() with the front element of lop, then pushes it to the back of the queue if successful. Otherwise, returns false.
-//     for(i=0;i<MAX_PLANETS;i++){
 
-//     }
-// }
 
-void Universe::deletePlanets(Cue<idn,MAX_PLANETS> rml){ // removes elements of rml from lop, then adds them to the back of the queue.
-    idn rid = rml.front();
-    for(idn i = 0; i < MAX_PLANETS; i++){
-        if(rid != lop.front()){
-            lop.next();
-        } else {
-            rml.pop();
-            rid = rml.front();
-            lop.pop();
-            lopCount--;
-            if(rid == MAX_PLANETS){break;}
-        }
-    }
+void Universe::deletePlanets(VecCue<idn> rml)
+{ // removes elements of rml from lop, then adds them to the back of the queue. Since rml will always be constructed in the order lop is in, no searching is required, and we can do this in linear time.
+    lop.bulkPop(rml);
+    lopCount -= rml.size();
 }
 
-void Universe::addPlanet(){
+idn Universe::addPlanet()
+{ // Increases the number of planets by 1.
     lopCount++;
+    return lop[lopCount-1];
 }
 
-// void Universe::log(){ 
-//     for(idn i = 0; i < lopCount; i++){
-//         std::cout << "Element " << iterateLop() << " found.\n";
-//     }
-//     for(idn i = 0; i < MAX_PLANETS - lopCount;i++){
-//         iterateLop();
-//     }
-//     std::cout << "\n";
-// }
-
-void Universe::log(){
+void Universe::log()
+{ // Logs all the id numbers in lop, in order.
     std::cout << "Planet count: " << lopCount << "\n";
     logCue(lop);
+}
+
+idn Universe::lopPos()
+{ // Returns the position of the queue in lop.
+    return lop.position;
+}
+
+idn Universe::getLopCount()
+{ // Returns the number of planets currently 'alive' in lop.
+    return lopCount;
 }

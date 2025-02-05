@@ -12,18 +12,28 @@ int main(){
     for(int i=0;i<7;i++){uni.addPlanet();}
     uni.log();
 
-    std::array<uint16_t,MAX_PLANETS> rmlarr;
-    rmlarr.fill(MAX_PLANETS);
-    rmlarr[0]=2;
-    rmlarr[1]=5;
-    for(int i=2;i<MAX_PLANETS; i++){
-        rmlarr[i]=-1;
+    VecCue <idn> rml;
+    rml.push((idn) 2);
+    rml.push((idn) 5);
+    rml.push((idn) 9);
+
+    std::cout << "\n";
+    for(int i=0;i<rml.size();i++){
+        std::cout << rml.position << "\n" << rml.front() << "\n" << rml[0] << "\n";
+        rml.pop();
     }
-    Cue <uint16_t,MAX_PLANETS> rml(rmlarr);
+    // std::vector<idn> rmlarr;
+    // rmlarr[0]=2;
+    // rmlarr[1]=5;
+    // for(int i=2;i<MAX_PLANETS; i++){
+    //     rmlarr[i]=MAX_PLANETS;
+    // }
+    // VecCue <uint16_t,0> rml(rmlarr);
     uni.deletePlanets(rml);
     uni.log();
     uni.addPlanet();
     uni.log();
+
     // auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
     // window.setFramerateLimit(60);
     // sf::Font font("./Assets/calibri.ttf");
